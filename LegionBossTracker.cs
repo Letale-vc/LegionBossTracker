@@ -70,6 +70,7 @@ public class LegionBossTracker : BaseSettingsPlugin<Settings>
         return base.Initialise();
     }
 
+
     public override void Render()
     {
         IngameUIElements inGameUi = GameController.Game.IngameState.IngameUi;
@@ -82,7 +83,7 @@ public class LegionBossTracker : BaseSettingsPlugin<Settings>
             return;
         }
         int hight = _bosses.Count * 20 + 20;
-        Graphics.DrawBox(new RectangleF(Settings.BoxPositionY, Settings.BoxPositionX, 280, hight), Settings.BoxBackgroundColor);
+        Graphics.DrawBox(new RectangleF(Settings.BoxPositionX, Settings.BoxPositionY, 280, hight), Settings.BoxBackgroundColor);
 
         int positionTextY = Settings.BoxPositionY + 10;
         int positionTextX = Settings.BoxPositionX + 10;
@@ -90,8 +91,8 @@ public class LegionBossTracker : BaseSettingsPlugin<Settings>
         foreach (KeyValuePair<string, LegionBoss> boss in _bosses)
         {
             Color color = Settings.EnableColorization ? BossInfo.Colors[boss.Value.Entity.Metadata] : Color.White;
-            _ = Graphics.DrawText($"{boss.Key}: ", new Vector2(positionTextX, positionTextY), color, 11);
-            _ = Graphics.DrawText($"{boss.Value.GetStatus()}", new Vector2(positionTextX + 200, positionTextY), boss.Value.GetStatusColor(), 11);
+            Graphics.DrawText($"{boss.Key}: ", new Vector2(positionTextX, positionTextY), color);
+            Graphics.DrawText($"{boss.Value.GetStatus()}", new Vector2(positionTextX + 200, positionTextY), boss.Value.GetStatusColor());
             positionTextY += 20;
         }
 
@@ -104,7 +105,7 @@ public class LegionBossTracker : BaseSettingsPlugin<Settings>
                 if (boss.Value.IsAlive && boss.Value.Entity.IsValid)
                 {
                     Color color = Settings.EnableColorization ? boss.Value.ColorText : Color.White;
-                    _ = boss.Value.Entity.TryGetComponent<Render>(out Render renderComp);
+                    boss.Value.Entity.TryGetComponent<Render>(out Render renderComp);
                     Vector2 bossPos = GameController.IngameState.Data.GetGridScreenPosition(boss.Value.Entity.GridPosNum);
                     Graphics.DrawLine(playerPos, bossPos, 2, color);
                     DrawWorldCircle(boss.Value.Entity.PosNum, renderComp.BoundsNum.X, color);
@@ -121,18 +122,18 @@ public class LegionBossTracker : BaseSettingsPlugin<Settings>
             foreach (Entity entity in test)
             {
 
-                Graphics.DrawText($"{entity.RenderName} {entity.Metadata}", new Vector2(50, posY += 20), Color.White, 11);
+                Graphics.DrawText($"{entity.RenderName} {entity.Metadata}", new Vector2(50, posY += 20), Color.White);
                 Graphics.DrawText($"IsAlive:{entity.IsAlive}   " +
                                        $"IsDead:{entity.IsDead}   " +
                                        $"IsTargetable:{entity.IsTargetable} " +
                                        $"IsValid:{entity.IsValid}   " +
                                        $"IsHidden:{entity.IsHidden}  "
-                                      , new Vector2(50, posY += 20), Color.White, 11);
+                                      , new Vector2(50, posY += 20), Color.White);
                 if (entity.TryGetComponent(out StateMachine state))
                 {
                     state.States.ForEach(x =>
                                   {
-                                      _ = Graphics.DrawText($"{x.Name}  :: {x.Value} ", new Vector2(50, posY += 20), Color.White, 1111);
+                                      _ = Graphics.DrawText($"{x.Name}  :: {x.Value} ", new Vector2(50, posY += 20), Color.White);
                                   });
                 }
             }
@@ -152,7 +153,7 @@ public class LegionBossTracker : BaseSettingsPlugin<Settings>
                     {
                         state.States.ForEach(x =>
                         {
-                            _ = Graphics.DrawText($"Crystal {x.Name}  :: {x.Value} ", new Vector2(50, posY += 20), Color.White, 1111);
+                            Graphics.DrawText($"Crystal {x.Name}  :: {x.Value} ", new Vector2(50, posY += 20), Color.White);
                         });
                     }
 
